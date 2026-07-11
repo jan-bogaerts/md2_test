@@ -8,7 +8,7 @@ owner:
 affects:
 agents:
 policy:
-after: 9167161c-2bc8-455e-8204-4aec045ec4c5
+after: 
 ---
 # Go**al**
 
