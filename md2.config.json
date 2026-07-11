@@ -23,7 +23,7 @@
   ],
   "diffCommand": "git show {{commit}}",
   "projectFolder": "design",
-  "pushMode": "auto",
+  "pushMode": "manual",
   "states": [
     {
       "alwaysVisible": true,
