@@ -8,7 +8,7 @@ owner:
 affects:
 agents:
 policy:
-after: f1150d6f-4ad8-454f-afa2-9e386d645b46
+after: 
 ---
 
 # Goal
