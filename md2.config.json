@@ -1,6 +1,6 @@
 {
   "actionsFolder": "actions",
-  "backgroundShade": "red",
+  "backgroundShade": "amber",
   "cardBodyTemplate": "# Goal\n\n# Current status\n\n# Details\n\n# Tasks",
   "cardTypes": [
     {
