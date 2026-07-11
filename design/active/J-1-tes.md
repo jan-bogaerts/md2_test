@@ -3,12 +3,12 @@ author:
 id: J-1
 internalId: f1150d6f-4ad8-454f-afa2-9e386d645b46
 title: tes
-status: ready for implementation
+status: new
 owner: 
 affects:
 agents:
 policy:
-after: 
+after: 9167161c-2bc8-455e-8204-4aec045ec4c5
 ---
 # Go**al**
 
