@@ -1,6 +1,6 @@
 ---
 author: 
-id: F-4
+id: F_4
 internalId: ec632bef-01bd-4e16-ae1a-402cbc2d26c4
 title: someting cool again
 status: new
