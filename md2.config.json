@@ -2,6 +2,7 @@
   "actionsFolder": "actions",
   "backgroundShade": "neutral",
   "cardBodyTemplate": "# Goal\n\n# Current status\n\n# Details\n\n# Tasks",
+  "cardSeparator": "_",
   "cardTypes": [
     {
       "color": "#1565c0",
