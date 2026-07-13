@@ -1,5 +1,5 @@
 ---
-id: F-1
+id: F_1
 internalId: 2f8cfca2-95da-464f-b14c-b5980a74d2d9
 status: new
 title: MD²
