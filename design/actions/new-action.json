@@ -4,8 +4,5 @@
   "label": "New action",
   "description": "Describe this action.",
   "type": "agent",
-  "prompt": "Describe what the agent should do.",
-  "onAfter": [
-    "md2.custom-prompt"
-  ]
+  "prompt": "Describe what the agent should do."
 }
