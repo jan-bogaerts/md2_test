@@ -12,7 +12,7 @@ after: 9167161c-2bc8-455e-8204-4aec045ec4c5
 ---
 # Go**al**
 
-Doe iets om te testen hoe het in elkaar zit
+Doe its om te testen hoe het in elkaar zit
 
 # Current status
 
