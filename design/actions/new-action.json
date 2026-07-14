@@ -1,8 +1,11 @@
 {
-  "description": "Describe this action.",
   "id": "47dafdc7-0be7-4d56-bb5a-07c813906416",
-  "label": "New action",
   "name": "new-action",
+  "label": "New action",
+  "description": "Describe this action.",
+  "type": "agent",
   "prompt": "Describe what the agent should do.",
-  "type": "agent"
+  "onAfter": [
+    "md2.custom-prompt"
+  ]
 }
