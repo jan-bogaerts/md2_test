@@ -2,7 +2,7 @@
   "id": "47dafdc7-0be7-4d56-bb5a-07c813906416",
   "name": "new-action",
   "label": "New action",
-  "description": "Describe this action.",
+  "description": "My first test action",
   "type": "agent",
   "prompt": "Describe what the agent should do."
 }
