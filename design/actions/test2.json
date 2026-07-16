@@ -6,5 +6,8 @@
   "agent": "codex",
   "model": "gpt-5.5",
   "phrases": [],
-  "prompt": "Can you shorten this text:&#x20;"
+  "prompt": "Can you shorten this text:&#x20;",
+  "appliesTo": {
+    "kind": "card"
+  }
 }
