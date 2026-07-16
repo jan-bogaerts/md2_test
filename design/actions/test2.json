@@ -1,7 +1,6 @@
 {
   "id": "3401787f-ff10-42fe-a6d3-0697d9cd6db5",
-  "name": "test2",
-  "label": "test2",
+  "label": "compress",
   "description": "Custom prompt action: test2",
   "type": "agent",
   "agent": "codex",
