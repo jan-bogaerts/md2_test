@@ -3,11 +3,11 @@
   "label": "compress",
   "description": "shorten the text. This is",
   "type": "agent",
+  "appliesTo": {
+    "kind": "card"
+  },
   "agent": "codex",
   "model": "gpt-5.5",
   "phrases": [],
-  "prompt": "Can you shorten this text:&#x20;",
-  "appliesTo": {
-    "kind": "card"
-  }
+  "prompt": "Can you shorten this text: {{"
 }
