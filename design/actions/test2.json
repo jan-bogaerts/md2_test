@@ -1,10 +1,11 @@
 {
-  "agent": "codex",
-  "description": "Custom prompt action: test2",
   "id": "3401787f-ff10-42fe-a6d3-0697d9cd6db5",
-  "label": "test2",
-  "model": "GPT 5.5",
   "name": "test2",
-  "prompt": "something to say?",
-  "type": "agent"
+  "label": "test2",
+  "description": "Custom prompt action: test2",
+  "type": "agent",
+  "agent": "codex",
+  "model": "gpt-5.5",
+  "phrases": [],
+  "prompt": "something to say?"
 }
