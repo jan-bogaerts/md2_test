@@ -6,6 +6,11 @@
   "appliesTo": {
     "kind": "project"
   },
-  "phrases": [],
+  "phrases": [
+    {
+      "text": "",
+      "title": ""
+    }
+  ],
   "prompt": "Describe what the agent should do."
 }
