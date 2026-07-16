@@ -1,7 +1,7 @@
 {
   "id": "3401787f-ff10-42fe-a6d3-0697d9cd6db5",
   "label": "compress",
-  "description": "shorteh",
+  "description": "shorten the text",
   "type": "agent",
   "agent": "codex",
   "model": "gpt-5.5",
