@@ -8,5 +8,8 @@
     "kind": "project"
   },
   "phrases": [],
-  "prompt": "Describe what the agent should do."
+  "prompt": "Describe what the agent should do.",
+  "onBefore": [
+    "md2.custom-prompt"
+  ]
 }
