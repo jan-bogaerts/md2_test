@@ -11,6 +11,6 @@
   "phrases": [],
   "prompt": "Can you shorten this text: {{card-file}}",
   "onAfter": [
-    "md2.custom-prompt"
+    "66008cdd-e872-404b-81f1-58614c5291e6"
   ]
 }
