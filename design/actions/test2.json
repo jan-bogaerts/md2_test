@@ -10,7 +10,7 @@
     "66008cdd-e872-404b-81f1-58614c5291e6"
   ],
   "agent": "codex",
-  "model": "gpt-5.5",
+  "model": "gpt-5.6-luna",
   "phrases": [],
   "prompt": "Can you shorten this text: @{{card-file}}"
 }
