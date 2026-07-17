@@ -4,7 +4,7 @@
   "description": "My first test action",
   "type": "agent",
   "appliesTo": {
-    "kind": "project"
+    "kind": "card"
   },
   "phrases": [
     {
