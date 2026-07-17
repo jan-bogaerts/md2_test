@@ -1,8 +1,8 @@
 {
   "id": "66008cdd-e872-404b-81f1-58614c5291e6",
   "label": "commit card",
-  "description": "Describe this action.",
-  "type": "agent",
+  "description": "commit card to git",
+  "type": "command",
   "phrases": [],
-  "prompt": "Describe what the agent should do."
+  "command": "git"
 }
