@@ -4,5 +4,5 @@
   "description": "commit card to git",
   "type": "command",
   "phrases": [],
-  "command": "git commit {{card"
+  "command": "git commit {{card-filel"
 }
