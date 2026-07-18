@@ -12,11 +12,9 @@ agents:
 policy:
 after: 
 ---
-\## Goal
+\## Goal&#x20;
 
 Let users show or hide Observation augmentation restrictions in the image/video info overlay and tooltip, and move the \`Info shown\` submenu out of \`search\_result\_item\_menu.jsx\` so the menu stays manageable.
-
-
 
 \## User Stories
 
@@ -25,8 +23,6 @@ Let users show or hide Observation augmentation restrictions in the image/video 
 2\. As a reviewer, I want to toggle augmentation restriction info independently, so that I can reduce overlay noise when it is not needed.
 
 3\. As a developer, I want the \`Info shown\` menu state and submenu markup isolated in its own component, so that \`search\_result\_item\_menu.jsx\` remains focused on the main context menu.
-
-
 
 \## Current state
 
@@ -41,8 +37,6 @@ Let users show or hide Observation augmentation restrictions in the image/video 
 \- Both overlay and tooltip treat the info surface as empty when only \`uri\`, \`indexDetails\`, and \`value\` are disabled.
 
 \- F-134 stores augmentation restrictions on Observations as \`avoidAugmentations\`. F-136 moved the restriction labels to \`src/services/filtering/augmentation\_restriction\_options.js\` for reuse by filtering and the training augmentations menu.
-
-
 
 \## implementation details
 
@@ -92,8 +86,6 @@ Let users show or hide Observation augmentation restrictions in the image/video 
 
 &#x20; \- Visibility changes must continue to clear cached lines and reload the displayed info.
 
-
-
 \## Acceptance Criteria
 
 \- Given an Observation has \`avoidAugmentations\`, when image info is shown and \`Augmentation restrictions\` is enabled, then the overlay and tooltip include a readable augmentation restrictions line.
@@ -112,8 +104,6 @@ Let users show or hide Observation augmentation restrictions in the image/video 
 
 \- Tests cover \`activeViewService\` visibility defaults/setters, \`buildInfoLines\` restriction output and visibility behavior, the new \`SearchResultInfoMenuItem\`, and updated empty-field checks in overlay/tooltip.
 
-
-
 \## Out of Scope
 
 \- Editing augmentation restrictions from the info overlay or tooltip.
@@ -123,8 +113,6 @@ Let users show or hide Observation augmentation restrictions in the image/video 
 \- Persisting image info visibility settings across app restarts.
 
 \- Changing the existing \`Training augmentations\` menu behavior.
-
-
 
 \## Further Notes
 
