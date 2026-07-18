@@ -16,28 +16,28 @@ after:
 ---
 ## Goal
 
-Show or hide Observation augmentation restrictions in the image/video info overlay and tooltip. Extract the `Info shown` submenu from `search_result_item_menu.jsx` into its own component.
+Show/hide Observation augmentation restrictions in image/video info overlays and tooltips. Extract the `Info shown` submenu from `search_result_item_menu.jsx`.
 
 ## Requirements
 
-- Add `augmentationRestrictions` to `activeViewService.imageInfoVisibility`, defaulting to `true`. Preserve partial updates, add `showImageInfoAugmentationRestrictions`, and keep this as session-only state.
-- Create `src/main_window/images/search_result_info_menu_item.jsx` to own visibility state, event subscriptions, the `Info shown` submenu, check marks, and toggle handlers for URI, index details, value, and augmentation restrictions.
-- Replace the inline submenu in `search_result_item_menu.jsx` with `SearchResultInfoMenuItem`, preserving its placement and parent menu-closing behavior.
-- Update `buildInfoLines` to show a compact `Augmentation restrictions: ...` line when enabled and `avoidAugmentations` is present. Reuse `AUGMENTATION_RESTRICTION_GROUPS`; unknown tags may use their raw values.
-- Update overlay and tooltip `hasVisibleFields` checks and retain their existing reload behavior when visibility changes.
+- Add `augmentationRestrictions: true` to session-only `activeViewService.imageInfoVisibility`, preserving partial updates and exposing `showImageInfoAugmentationRestrictions`.
+- Create `search_result_info_menu_item.jsx` to own submenu state, subscriptions, check marks, and toggles for URI, index details, value, and restrictions.
+- Replace the inline submenu in `search_result_item_menu.jsx` with `SearchResultInfoMenuItem`, preserving placement and parent-menu closing.
+- Update `buildInfoLines` to show `Augmentation restrictions: ...` when enabled and `avoidAugmentations` exists. Reuse `AUGMENTATION_RESTRICTION_GROUPS`; raw values are acceptable for unknown tags.
+- Update overlay and tooltip `hasVisibleFields` checks without changing reload behavior.
 
 ## Acceptance Criteria
 
-- Enabled restrictions appear with readable labels; absent restrictions produce no empty line.
-- Toggling the new option updates its check mark and reloads both overlay and tooltip.
-- Restrictions alone count as visible information; disabling every field still shows `No info selected`.
-- Existing URI, index details, value, and submenu behavior remain unchanged.
-- Tests cover service defaults/setters, restriction line formatting and visibility, the new menu component, and empty-field checks.
+- Enabled restrictions show readable labels; absent restrictions show no empty line.
+- Toggling updates the check mark and reloads both overlay and tooltip.
+- Restrictions alone count as visible; disabling all fields still shows `No info selected`.
+- Existing URI, index, value, and submenu behavior is unchanged.
+- Tests cover service defaults/setters, line formatting/visibility, the menu component, and empty-field checks.
 
 ## Out of Scope
 
-- Editing or changing stored restriction tags.
-- Persisting visibility across app restarts.
+- Editing stored restriction tags.
+- Persisting visibility across restarts.
 - Changing the `Training augmentations` menu.
 
-Use the existing restriction-label definitions rather than duplicating them. The new component should fully own the submenu state.
+Use existing restriction-label definitions; the new component fully owns submenu state.
