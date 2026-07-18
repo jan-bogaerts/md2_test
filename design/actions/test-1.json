@@ -3,9 +3,9 @@
   "label": "Test 1",
   "description": "Describe this action.",
   "type": "agent",
-  "phrases": [],
-  "prompt": "S",
   "appliesTo": {
     "kind": "project"
-  }
+  },
+  "phrases": [],
+  "prompt": "Something funny"
 }
