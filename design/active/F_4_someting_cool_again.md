@@ -12,7 +12,7 @@ agents:
 policy:
 after: 
 ---
-\## Goal&#x20;
+\## Goal &#x20;
 
 Let users show or hide Observation augmentation restrictions in the image/video info overlay and tooltip, and move the \`Info shown\` submenu out of \`search\_result\_item\_menu.jsx\` so the menu stays manageable.
 
