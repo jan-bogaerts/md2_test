@@ -11,6 +11,7 @@ agents:
   - .md2-agent-logs/design_active_F_4_someting_cool_again.md_agent-482c00d7-ecda-40f9-ac88-e1bc719ee6aa.json
   - .md2-agent-logs/design_active_F_4_someting_cool_again.md_agent-67ad1e96-973f-4ba4-9223-819311e8e42f.json
   - design/logs/conversation__card__active_f_4_someting_cool_again__agent_3729e6c2_d417_4f99_aa3c_36739e0de9e0.json
+  - design/logs/conversation__card__active_f_4_someting_cool_again__agent_e3cb0b71_ed66_4296_9e90_9bd27e80bb98.json
 policy:
 after: 
 ---
