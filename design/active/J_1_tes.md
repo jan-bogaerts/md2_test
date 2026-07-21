@@ -9,6 +9,7 @@ affects:
 agents:
 policy:
 after: ec632bef-01bd-4e16-ae1a-402cbc2d26c4
+worktree: 1
 ---
 # Something funn
 
