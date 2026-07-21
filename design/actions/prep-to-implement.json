@@ -4,7 +4,7 @@
   "description": "prepare for implementation, report problems",
   "type": "agent",
   "phrases": [],
-  "prompt": "Describe what the agent should do.",
+  "prompt": "use /caveman skill\n\nwe are preparing to implement \\`{{card-file}}\\`. go over the document and think about how you would implement this. go over every step in detail to see if everything is clear and can be implemented without any issues.\n\nreport back on any problems you encounter.",
   "appliesTo": {
     "kind": "card"
   }
