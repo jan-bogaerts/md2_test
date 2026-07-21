@@ -133,6 +133,7 @@
     {
       "actionId": "md2.custom-prompt",
       "cardInternalId": null,
+      "cardPath": null,
       "completedAt": "2026-07-21T09:37:55.568Z",
       "events": [
         {
@@ -242,6 +243,30 @@
       "rootActionId": "md2.custom-prompt",
       "rootActionLabel": "Custom prompt",
       "startedAt": "2026-07-21T09:14:00.746Z",
+      "status": "completed"
+    },
+    {
+      "commits": [],
+      "completedAt": "2026-07-21T09:37:57.095Z",
+      "conversationIds": [
+        "agent-9682366b-0838-4f9e-85ea-79e504f8e72a"
+      ],
+      "executionId": "action-3bd47340-335c-4443-8fb2-b9e56e944ce5",
+      "history": {
+        "agent": "codex",
+        "completedAt": "2026-07-21T09:37:57.094Z",
+        "model": "gpt-5.6-sol",
+        "output": "Hi! What would you like to work on?2026-07-21T09:37:50.965433Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+        "prompt": "hi",
+        "status": "completed",
+        "thinkingLevel": "medium"
+      },
+      "origin": {
+        "kind": "project"
+      },
+      "rootActionId": "md2.custom-prompt",
+      "rootActionLabel": "Custom prompt",
+      "startedAt": "2026-07-21T09:34:38.109Z",
       "status": "completed"
     }
   ],
