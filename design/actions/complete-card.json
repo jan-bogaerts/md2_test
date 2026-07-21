@@ -3,9 +3,9 @@
   "label": "complete card",
   "description": "Complete the contents of the card",
   "type": "agent",
-  "phrases": [],
-  "prompt": "Describe what the agent should do.",
   "appliesTo": {
     "kind": "card"
-  }
+  },
+  "phrases": [],
+  "prompt": "Describe what the agent should do."
 }
