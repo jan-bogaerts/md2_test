@@ -253,6 +253,67 @@
         "reasoningTokens": 0,
         "totalTokens": 13173
       }
+    },
+    {
+      "actionId": "md2.custom-prompt",
+      "cardInternalId": null,
+      "completedAt": "2026-07-21T13:27:21.065Z",
+      "events": [
+        {
+          "content": "codex --model gpt-5.6-sol -c model_reasoning_effort=medium --search exec --json",
+          "id": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-started",
+          "timestamp": "2026-07-21T13:27:14.017Z",
+          "type": "started"
+        },
+        {
+          "content": "2026-07-21T13:27:16.314868Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-error-1",
+          "timestamp": "2026-07-21T13:27:16.314Z",
+          "type": "error"
+        },
+        {
+          "content": "0",
+          "id": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-closed",
+          "timestamp": "2026-07-21T13:27:21.065Z",
+          "type": "closed"
+        }
+      ],
+      "hasExplicitTitle": true,
+      "id": "agent-d4d4f854-b207-48dd-ac75-0dc0aa51b967",
+      "messages": [
+        {
+          "content": "hi",
+          "id": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-user",
+          "role": "user",
+          "timestamp": "2026-07-21T13:27:14.017Z"
+        },
+        {
+          "agent": "codex",
+          "content": "Hi! What can I help you with?",
+          "id": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-assistant",
+          "role": "assistant",
+          "timestamp": "2026-07-21T13:27:21.065Z"
+        }
+      ],
+      "providerSessions": [
+        {
+          "agent": "codex",
+          "conversationId": "019f84db-fa81-7343-b4b5-4ca470f68bd9",
+          "createdAt": "2026-07-21T13:27:21.065Z",
+          "lastUsedAt": "2026-07-21T13:27:21.065Z",
+          "synchronizedThroughMessageId": "agent-turn-f1d0ed4e-5dad-4769-bd38-6ea6822521fc-assistant"
+        }
+      ],
+      "startedAt": "2026-07-21T13:27:14.017Z",
+      "status": "completed",
+      "title": "Custom prompt",
+      "usage": {
+        "cachedInputTokens": 9984,
+        "inputTokens": 3176,
+        "outputTokens": 13,
+        "reasoningTokens": 0,
+        "totalTokens": 13173
+      }
     }
   ],
   "origin": {
@@ -339,12 +400,12 @@
       ],
       "executionId": "action-2725d0fe-64a2-476a-8e9b-56bd131f8ef4",
       "history": {
-        "agent": "codex",
         "completedAt": "2026-07-21T09:57:38.101Z",
-        "model": "gpt-5.6-sol",
         "output": "Hi! What are we working on today?2026-07-21T09:57:30.677245Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
         "prompt": "hi",
         "status": "completed",
+        "agent": "codex",
+        "model": "gpt-5.6-sol",
         "thinkingLevel": "medium"
       },
       "origin": {
