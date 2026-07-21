@@ -14,7 +14,10 @@ after: c6b0a32d-f2a7-4b37-8652-7348162bfc8e
 
 When scrolling up in browser, hide appbar when in cardview or list view.
 
-Card popup is missing expand button on mobile.
+Card popup :
+
+* is missing expand button on mobile.
+* Remove '*close*' button
 
 # Current status
 
