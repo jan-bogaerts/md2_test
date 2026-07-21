@@ -1,0 +1,76 @@
+{
+  "conversations": [
+    {
+      "actionId": "md2.custom-prompt",
+      "cardInternalId": null,
+      "completedAt": "2026-07-21T09:10:17.329Z",
+      "events": [
+        {
+          "content": "codex --model gpt-5.6-sol -c model_reasoning_effort=medium --search exec --json",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-started",
+          "timestamp": "2026-07-21T09:10:05.727Z",
+          "type": "started"
+        },
+        {
+          "content": "2026-07-21T09:10:12.131572Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-error-1",
+          "timestamp": "2026-07-21T09:10:12.131Z",
+          "type": "error"
+        },
+        {
+          "content": "2026-07-21T09:10:15.164094Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-error-2",
+          "timestamp": "2026-07-21T09:10:15.163Z",
+          "type": "error"
+        },
+        {
+          "content": "0",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-closed",
+          "timestamp": "2026-07-21T09:10:17.329Z",
+          "type": "closed"
+        }
+      ],
+      "hasExplicitTitle": true,
+      "id": "agent-cb3f00d7-b5ef-4fe1-9b3d-a896864f85d7",
+      "messages": [
+        {
+          "content": "hi",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-user",
+          "role": "user",
+          "timestamp": "2026-07-21T09:10:05.727Z"
+        },
+        {
+          "agent": "codex",
+          "content": "Hi! What would you like to work on?",
+          "id": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-assistant",
+          "role": "assistant",
+          "timestamp": "2026-07-21T09:10:17.329Z"
+        }
+      ],
+      "providerSessions": [
+        {
+          "agent": "codex",
+          "conversationId": "019f83f0-9f3d-7ed1-8736-1256fa684282",
+          "createdAt": "2026-07-21T09:10:17.329Z",
+          "lastUsedAt": "2026-07-21T09:10:17.329Z",
+          "synchronizedThroughMessageId": "agent-turn-2a7a676e-4ba8-49be-957f-0eb96ce68a68-assistant"
+        }
+      ],
+      "startedAt": "2026-07-21T09:10:05.727Z",
+      "status": "completed",
+      "title": "Custom prompt",
+      "usage": {
+        "cachedInputTokens": 9984,
+        "inputTokens": 3176,
+        "outputTokens": 14,
+        "reasoningTokens": 0,
+        "totalTokens": 13174
+      }
+    }
+  ],
+  "origin": {
+    "kind": "project"
+  },
+  "records": [],
+  "version": 1
+}
