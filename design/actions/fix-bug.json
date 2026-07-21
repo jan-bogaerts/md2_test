@@ -1,0 +1,11 @@
+{
+  "id": "5c6ec911-a3e8-46d3-8500-46875d67b78d",
+  "label": "fix bug",
+  "description": "fix a bug report",
+  "type": "agent",
+  "phrases": [],
+  "prompt": "Describe what the agent should do.",
+  "appliesTo": {
+    "kind": "card"
+  }
+}
