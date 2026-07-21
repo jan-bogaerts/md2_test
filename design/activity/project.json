@@ -257,6 +257,7 @@
     {
       "actionId": "md2.custom-prompt",
       "cardInternalId": null,
+      "cardPath": null,
       "completedAt": "2026-07-21T13:27:21.065Z",
       "events": [
         {
@@ -414,6 +415,30 @@
       "rootActionId": "md2.custom-prompt",
       "rootActionLabel": "Custom prompt",
       "startedAt": "2026-07-21T09:57:29.456Z",
+      "status": "completed"
+    },
+    {
+      "commits": [],
+      "completedAt": "2026-07-21T13:27:22.346Z",
+      "conversationIds": [
+        "agent-d4d4f854-b207-48dd-ac75-0dc0aa51b967"
+      ],
+      "executionId": "action-c114cb6d-7084-40e6-a8e7-ea0e173bf889",
+      "history": {
+        "agent": "codex",
+        "completedAt": "2026-07-21T13:27:22.346Z",
+        "model": "gpt-5.6-sol",
+        "output": "Hi! What can I help you with?2026-07-21T13:27:16.314868Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+        "prompt": "hi",
+        "status": "completed",
+        "thinkingLevel": "medium"
+      },
+      "origin": {
+        "kind": "project"
+      },
+      "rootActionId": "md2.custom-prompt",
+      "rootActionLabel": "Custom prompt",
+      "startedAt": "2026-07-21T13:27:14.016Z",
       "status": "completed"
     }
   ],
