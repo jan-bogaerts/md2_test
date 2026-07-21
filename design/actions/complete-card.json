@@ -1,8 +1,11 @@
 {
   "id": "5b88355d-f964-459a-bc67-6618650866ba",
-  "label": "complete card something",
+  "label": "complete card",
   "description": "Complete the contents of the card",
   "type": "agent",
   "phrases": [],
-  "prompt": "Describe what the agent should do."
+  "prompt": "Describe what the agent should do.",
+  "appliesTo": {
+    "kind": "card"
+  }
 }
