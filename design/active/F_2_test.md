@@ -12,9 +12,7 @@ after:
 ---
 # Goal
 
-Dit is een test die ik aan het proberen ben
-
-
+Dit is een test die ik aan het proberen ben &#x20;
 
 hopeli
 
