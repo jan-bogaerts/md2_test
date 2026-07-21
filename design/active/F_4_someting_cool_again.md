@@ -8,7 +8,6 @@ owner:
 affects:
 policy:
 after: 
-worktree: 1
 ---
 \## Goal &#x20;
 
