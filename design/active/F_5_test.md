@@ -3,14 +3,14 @@ author:
 id: F_5
 internalId: c6b0a32d-f2a7-4b37-8652-7348162bfc8e
 title: unify open document drafts and save state
-status: new
+status: design
 owner: 
 affects:
 agents:
   - design/activity/card__c6b0a32d-f2a7-4b37-8652-7348162bfc8e.json#conversation=agent-b7c16895-0929-4cc8-a70a-d011cb01053d
   - design/activity/card__c6b0a32d-f2a7-4b37-8652-7348162bfc8e.json#conversation=agent-d8d243e5-7305-4cb2-b7f7-060760089cfc
 policy:
-after: a5e5e021-323f-4b63-b2c5-e7f9bc54a188
+after: 2f8cfca2-95da-464f-b14c-b5980a74d2d9
 ---
 **## Problem**
 
