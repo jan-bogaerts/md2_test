@@ -8,6 +8,5 @@
   },
   "phrases": [],
   "prompt": "\\`{{card-file}}\\` is too verbose. make it more digestible, shorten it without loosing any detail.",
-  "trackFileChanges": true,
-  "needsWorkTree": true
+  "trackFileChanges": true
 }
