@@ -10,6 +10,7 @@ policy:
 after: 
 agents:
   - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-d6b85e43-2083-4376-8f99-5b8badffa7f7
+  - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-118559c2-9ec9-49b7-ac0b-4b79a057438f
 ---
 
 ## Goal
