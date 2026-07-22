@@ -6,38 +6,5 @@ title: MD²
 after: 9167161c-2bc8-455e-8204-4aec045ec4c5
 author: Jan Bogaerts
 agents:
-  - .md2-agent-logs/design_active_F_1_md.md_agent-5dceac44-9f0d-404f-8aa1-4be24b3ffe3f.json
-  - .md2-agent-logs/design_active_F_1_md.md_agent-e34f95d2-fd0a-425b-a336-c08c795ef388.json
 ---
-# MD²
-
-* test is workign
-* so
-* lkjal
-* lkajdsfl
-
-
-
-tisets
-
-
-
-aldksfjalkdjf
-
-
-
-lkjasdkflkj
-
-
-
-alkdsflakf
-
-lkasdflk
-
-
-
-alskdfjal
-
-> test
-
-Project design folder created by MD².
+some test
