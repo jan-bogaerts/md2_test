@@ -1,0 +1,72 @@
+{
+  "conversations": [
+    {
+      "actionId": "5b88355d-f964-459a-bc67-6618650866ba",
+      "cardInternalId": "f1150d6f-4ad8-454f-afa2-9e386d645b46",
+      "cardPath": "design/active/J_1_tes.md",
+      "completedAt": "2026-07-22T15:34:45.196Z",
+      "events": [
+        {
+          "content": "codex --model gpt-5.6-sol -c model_reasoning_effort=medium --search exec --json",
+          "id": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-started",
+          "timestamp": "2026-07-22T15:34:38.734Z",
+          "type": "started"
+        },
+        {
+          "content": "2026-07-22T15:34:39.405766Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-error-1",
+          "timestamp": "2026-07-22T15:34:39.405Z",
+          "type": "error"
+        },
+        {
+          "content": "0",
+          "id": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-closed",
+          "timestamp": "2026-07-22T15:34:45.196Z",
+          "type": "closed"
+        }
+      ],
+      "hasExplicitTitle": true,
+      "id": "agent-f1f52952-5d50-4c70-82e4-226c4092adb1",
+      "messages": [
+        {
+          "content": "use /caveman\n\nadd \\`Current state\\`, \\`implementation details\\`, \\`acceptance criteria\\` for \\`design/active/J_1_tes.md\\`.&#x20;\n\nRead all referenced files before you begin. &#x20;\nAsk any question if something is ambiguous or not yet clear.\nKeep it short and to the point.",
+          "id": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-user",
+          "role": "user",
+          "timestamp": "2026-07-22T15:34:38.734Z"
+        },
+        {
+          "agent": "codex",
+          "content": "`/caveman` isn’t available in this session. What would you like it to do?",
+          "id": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-assistant",
+          "role": "assistant",
+          "timestamp": "2026-07-22T15:34:45.196Z"
+        }
+      ],
+      "providerSessions": [
+        {
+          "agent": "codex",
+          "conversationId": "019f8a76-f590-7542-bc9c-186f620aa2e0",
+          "createdAt": "2026-07-22T15:34:45.196Z",
+          "lastUsedAt": "2026-07-22T15:34:45.196Z",
+          "synchronizedThroughMessageId": "agent-turn-a2c9ff05-bf4a-4871-9265-5766db93d93e-assistant"
+        }
+      ],
+      "startedAt": "2026-07-22T15:34:38.734Z",
+      "status": "completed",
+      "title": "complete card",
+      "usage": {
+        "cachedInputTokens": 9984,
+        "inputTokens": 3000,
+        "outputTokens": 90,
+        "reasoningTokens": 63,
+        "totalTokens": 13137
+      }
+    }
+  ],
+  "origin": {
+    "cardInternalId": "f1150d6f-4ad8-454f-afa2-9e386d645b46",
+    "kind": "card"
+  },
+  "records": [],
+  "version": 1
+}
