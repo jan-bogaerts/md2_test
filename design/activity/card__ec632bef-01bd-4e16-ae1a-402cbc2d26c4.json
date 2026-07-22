@@ -1,0 +1,126 @@
+{
+  "conversations": [
+    {
+      "actionId": "558aca4d-9760-4cf0-a2a0-4319d1e20538",
+      "cardInternalId": "ec632bef-01bd-4e16-ae1a-402cbc2d26c4",
+      "cardPath": "design/active/F_4_someting_cool_again.md",
+      "completedAt": "2026-07-22T08:20:06.398Z",
+      "events": [
+        {
+          "content": "codex --model gpt-5.6-sol -c model_reasoning_effort=medium --search exec --json",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-started",
+          "timestamp": "2026-07-22T08:18:39.790Z",
+          "type": "started"
+        },
+        {
+          "content": "2026-07-22T08:18:43.075674Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-1",
+          "timestamp": "2026-07-22T08:18:43.073Z",
+          "type": "error"
+        },
+        {
+          "content": "<<<FILE:design/active/F_4_someting_cool_again.md>>>\r\n---\nauthor: \nid: F_4\ninternalId: ec632bef-01bd-4e16-ae1a-402cbc2d26c4\ntitle: Show augmentation restrictions in image info\nstatus: new\nowner: \naffects:\npolicy:\nafter: \n---\n\\## Goal &#x20;\n\n\n\nLet users show or hide Observation augmentation restrictions in the image/video info overlay and tooltip, and move the \\`Info shown\\` submenu out of \\`search\\_result\\_item\\_menu.jsx\\` so the menu stays manageable.\n\n\\## User Stories\n\n1\\. As a reviewer, I want augmentation restrictions visible in image/video info, so that I can inspect restriction assignments without opening the training augmentations menu.\n\n2\\. As a reviewer, I want to toggle augmentation restriction info independently, so that I can reduce overlay noise when it is not needed.\n\n3\\. As a developer, I want the \\`Info shown\\` menu state and submenu markup isolated in its own component, so that \\`search\\_result\\_item\\_menu.jsx\\` remains focused on the main context menu.\n\n\\## Current state\n\n\\- \\`SearchResultItemMenu\\` owns \\`imageInfoVisibility\\` state, subscribes to \\`activeViewService.events.imageInfoVisibility\\`, and renders the \\`Info shown\\` submenu inline.\n\n\\- \\`activeViewService.imageInfoVisibility\\` currently contains \\`uri\\`, \\`indexDetails\\`, and \\`value\\`, all defaulting to \\`true\\`. It exposes \\`showImageInfoUri\\`, \\`showImageInfoIndexDetails\\`, and \\`showImageInfoValue\\` setters.\n\n\\- \\`SearchResultInfoOverlay\\` and \\`SearchResultTooltip\\` listen for \\`imageInfoVisibility\\` changes and pass the visibility object to \\`buildInfoLines\\`.\n\n\\- \\`buildInfoLines\\` renders URI, index details, and YAML-dumped \\`item.value\\` depending on visibility. It does not currently display \\`avoidAugmentations\\`.\n\n\\- Both overlay and tooltip treat the info surface as empty when only \\`uri\\`, \\`indexDetails\\`, and \\`value\\` are disabled.\n\n\\- F-134 stores augmentation restrictions on Observations as \\`avoidAugmentations\\`. F-136 moved the restriction labels to \\`src/services/filtering/augmentation\\_restriction\\_options.js\\` for reuse by filtering and the training augmentations menu.\n\n\\## implementation details\n\n\\- Extend \\`activeViewService.imageInfoVisibility\\` with an \\`augmentationRestrictions\\` boolean.\n\n&#x20; \\- Default should be \\`true\\`, matching the current default-visible behavior for URI, index details, and value.\n\n&#x20; \\- The setter must preserve the existing partial-update behavior and include \\`augmentationRestrictions\\` in the no-change comparison.\n\n&#x20; \\- Add \\`showImageInfoAugmentationRestrictions\\` getter/setter that updates only this field.\n\n&#x20; \\- This remains session state like the existing image info visibility; do not add config persistence unless a separate feature asks for it.\n\n\\- Create \\`src/main\\_window/images/search\\_result\\_info\\_menu\\_item.jsx\\`.\n\n&#x20; \\- It owns the \\`imageInfoVisibility\\` React state and the subscription to \\`activeViewService.events.imageInfoVisibility\\`.\n\n&#x20; \\- It renders the top-level \\`Info shown\\` \\`MenuItem\\`, its nested \\`Menu\\`, check marks, and all toggle handlers.\n\n&#x20; \\- Include menu items for \\`URI\\`, \\`Index details\\`, \\`Value\\`, and \\`Augmentation restrictions\\`.\n\n&#x20; \\- Use the same MUI menu primitives and submenu placement currently used by \\`search\\_result\\_item\\_menu.jsx\\`.\n\n&#x20; \\- Keep the component API small; the parent should not pass individual visibility fields or toggle handlers.\n\n\\- Update \\`search\\_result\\_item\\_menu.jsx\\`.\n\n&#x20; \\- Remove the inline \\`Info shown\\` state, effect, handlers, and submenu markup.\n\n&#x20; \\- Render the new \\`SearchResultInfoMenuItem\\` in the same location below \\`Show/Hide image info\\`.\n\n&#x20; \\- Keep parent-owned close behavior for the whole context menu unchanged.\n\n\\- Update \\`buildInfoLines\\`.\n\n&#x20; \\- Include augmentation restriction lines when \\`visibility.augmentationRestrictions !\\=\\= false\\` and the item has one or more \\`avoidAugmentations\\` tags.\n\n&#x20; \\- Reuse \\`AUGMENTATION\\_RESTRICTION\\_GROUPS\\` to map tags to user-facing labels. Unknown tags may fall back to the raw tag.\n\n&#x20; \\- Use a compact output format, for example \\`Augmentation restrictions: No shift left, No zoom out\\`.\n\n&#x20; \\- Do not add a line when the item has no restrictions.\n\n\\- Update \\`SearchResultInfoOverlay\\` and \\`SearchResultTooltip\\`.\n\n&#x20; \\- Their \\`hasVisibleFields\\` checks must include \\`augmentationRestrictions\\`.\n\n&#x20; \\- Visibility changes must continue to clear cached lines and reload the displayed info.\n\n\\## Acceptance Criteria\n\n\\- Given an Observation has \\`avoidAugmentations\\`, when image info is shown and \\`Augmentation restrictions\\` is enabled, then the overlay and tooltip include a readable augmentation restrictions line.\n\n\\- Given an Observation has no \\`avoidAugmentations\\`, when \\`Augmentation restrictions\\` is enabled, then no empty restrictions line is shown.\n\n\\- Given the user opens \\`Info shown\\`, when they toggle \\`Augmentation restrictions\\`, then the check mark updates and both overlay and tooltip reload according to the new visibility state.\n\n\\- Given only \\`Augmentation restrictions\\` is enabled, when an item has restriction tags, then the overlay/tooltip do not show \\`No info selected\\`.\n\n\\- Given all info fields are disabled, when the overlay or tooltip is rendered, then it still shows \\`No info selected\\`.\n\n\\- Given existing code toggles URI, Index details, or Value, when this feature is added, then those toggles keep their current behavior.\n\n\\- Given \\`search\\_result\\_item\\_menu.jsx\\` is rendered, when the \\`Info shown\\` menu is opened, then the submenu behavior is unchanged from the user's perspective except for the new augmentation restrictions option.\n\n\\- Tests cover \\`activeViewService\\` visibility defaults/setters, \\`buildInfoLines\\` restriction output and visibility behavior, the new \\`SearchResultInfoMenuItem\\`, and updated empty-field checks in overlay/tooltip.\n\n\\## Out of Scope\n\n\\- Editing augmentation restrictions from the info overlay or tooltip.\n\n\\- Changing how restriction tags are stored.\n\n\\- Persisting image info visibility settings across app restarts.\n\n\\- Changing the existing \\`Training augmentations\\` menu behavior.\n\n\\## Further Notes\n\n\\- Prefer importing the existing restriction label definitions instead of duplicating tag labels.\n\n\\- The new component should own the submenu state completely; this is an extraction of behavior, not just JSX.\r\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-provider-2",
+          "timestamp": "2026-07-22T08:19:04.912Z",
+          "type": "tool.command_execution"
+        },
+        {
+          "content": "2026-07-22T08:19:04.943209Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-3",
+          "timestamp": "2026-07-22T08:19:04.940Z",
+          "type": "error"
+        },
+        {
+          "content": "2026-07-22T08:19:40.848628Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-4",
+          "timestamp": "2026-07-22T08:19:40.847Z",
+          "type": "error"
+        },
+        {
+          "content": "[{\"path\":\"C:\\\\Users\\\\janbo\\\\Documents\\\\dev\\\\md2_test\\\\design\\\\active\\\\F_4_someting_cool_again.md\",\"kind\":\"add\"}]",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-provider-5",
+          "timestamp": "2026-07-22T08:19:45.923Z",
+          "type": "tool.file_change"
+        },
+        {
+          "content": "2026-07-22T08:19:45.961773Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-6",
+          "timestamp": "2026-07-22T08:19:45.961Z",
+          "type": "error"
+        },
+        {
+          "content": " design/active/F_4_someting_cool_again.md | 135 ++++++++++++-------------------\n 1 file changed, 50 insertions(+), 85 deletions(-)\ndiff --git a/design/active/F_4_someting_cool_again.md b/design/active/F_4_someting_cool_again.md\nindex 82e1dd2..33acf44 100644\n--- a/design/active/F_4_someting_cool_again.md\n+++ b/design/active/F_4_someting_cool_again.md\n@@ -9,112 +9,77 @@ affects:\n policy:\n after: \n ---\n-\\## Goal &#x20;\n \n+## Goal\n \n+Let reviewers view and independently hide Observation augmentation restrictions in the image/video info overlay and tooltip, without opening the training augmentations menu. Extract the `Info shown` submenu into its own component so `search_result_item_menu.jsx` stays focused on the main context menu.\n \n-Let users show or hide Observation augmentation restrictions in the image/video info overlay and tooltip, and move the \\`Info shown\\` submenu out of \\`search\\_result\\_item\\_menu.jsx\\` so the menu stays manageable.\n+## Current state\n \n-\\## User Stories\n+- `SearchResultItemMenu` owns `imageInfoVisibility`, subscribes to `activeViewService.events.imageInfoVisibility`, and renders `Info shown` inline.\n+- `activeViewService.imageInfoVisibility` contains `uri`, `indexDetails`, and `value`, all defaulting to `true`, with corresponding `showImageInfo...` setters.\n+- `SearchResultInfoOverlay` and `SearchResultTooltip` subscribe to visibility changes, pass visibility to `buildInfoLines`, and consider the surface empty when those three fields are disabled.\n+- `buildInfoLines` conditionally renders URI, index details, and YAML-dumped `item.value`; it does not render `avoidAugmentations`.\n+- F-134 stores Observation restrictions in `avoidAugmentations`. F-136 moved their labels to `src/services/filtering/augmentation_restriction_options.js` for reuse by filtering and the training augmentations menu.\n \n-1\\. As a reviewer, I want augmentation restrictions visible in image/video info, so that I can inspect restriction assignments without opening the training augmentations menu.\n+## Implementation\n \n-2\\. As a reviewer, I want to toggle augmentation restriction info independently, so that I can reduce overlay noise when it is not needed.\n+### Visibility state\n \n-3\\. As a developer, I want the \\`Info shown\\` menu state and submenu markup isolated in its own component, so that \\`search\\_result\\_item\\_menu.jsx\\` remains focused on the main context menu.\n+Extend `activeViewService.imageInfoVisibility` with `augmentationRestrictions`:\n \n-\\## Current state\n+- Default it to `true`, consistent with the existing fields.\n+- Preserve partial updates and include it in the no-change comparison.\n+- Add a `showImageInfoAugmentationRestrictions` getter/setter that updates only this field.\n+- Keep this as session state; do not add config persistence.\n \n-\\- \\`SearchResultItemMenu\\` owns \\`imageInfoVisibility\\` state, subscribes to \\`activeViewService.events.imageInfoVisibility\\`, and renders the \\`Info shown\\` submenu inline.\n+### Menu extraction\n \n-\\- \\`activeViewService.imageInfoVisibility\\` currently contains \\`uri\\`, \\`indexDetails\\`, and \\`value\\`, all defaulting to \\`true\\`. It exposes \\`showImageInfoUri\\`, \\`showImageInfoIndexDetails\\`, and \\`showImageInfoValue\\` setters.\n+Create `src/main_window/images/search_result_info_menu_item.jsx`:\n \n-\\- \\`SearchResultInfoOverlay\\` and \\`SearchResultTooltip\\` listen for \\`imageInfoVisibility\\` changes and pass the visibility object to \\`buildInfoLines\\`.\n+- Own the `imageInfoVisibility` React state and subscription to `activeViewService.events.imageInfoVisibility`.\n+- Render the top-level `Info shown` `MenuItem`, nested `Menu`, check marks, and toggle handlers for `URI`, `Index details`, `Value`, and `Augmentation restrictions`.\n+- Reuse the current MUI primitives and submenu placement.\n+- Keep its API small: the parent must not pass individual visibility fields or toggle handlers.\n \n-\\- \\`buildInfoLines\\` renders URI, index details, and YAML-dumped \\`item.value\\` depending on visibility. It does not currently display \\`avoidAugmentations\\`.\n+In `search_result_item_menu.jsx`:\n \n-\\- Both overlay and tooltip treat the info surface as empty when only \\`uri\\`, \\`indexDetails\\`, and \\`value\\` are disabled.\n+- Remove the inline `Info shown` state, effect, handlers, and markup.\n+- Render `SearchResultInfoMenuItem` in the same position, below `Show/Hide image info`.\n+- Leave parent-owned context-menu closing behavior unchanged.\n \n-\\- F-134 stores augmentation restrictions on Observations as \\`avoidAugmentations\\`. F-136 moved the restriction labels to \\`src/services/filtering/augmentation\\_restriction\\_options.js\\` for reuse by filtering and the training augmentations menu.\n+### Info output\n \n-\\## implementation details\n+Update `buildInfoLines` to add restrictions only when `visibility.augmentationRestrictions !== false` and `item.avoidAugmentations` contains at least one tag.\n \n-\\- Extend \\`activeViewService.imageInfoVisibility\\` with an \\`augmentationRestrictions\\` boolean.\n+- Map tags to readable labels with `AUGMENTATION_RESTRICTION_GROUPS`; fall back to the raw tag when unknown.\n+- Use a compact format, such as `Augmentation restrictions: No shift left, No zoom out`.\n+- Add no line when the item has no restrictions.\n \n-&#x20; \\- Default should be \\`true\\`, matching the current default-visible behavior for URI, index details, and value.\n+Update `SearchResultInfoOverlay` and `SearchResultTooltip`:\n \n-&#x20; \\- The setter must preserve the existing partial-update behavior and include \\`augmentationRestrictions\\` in the no-change comparison.\n+- Include `augmentationRestrictions` in `hasVisibleFields`.\n+- Continue clearing cached lines and reloading displayed info after visibility changes.\n \n-&#x20; \\- Add \\`showImageInfoAugmentationRestrictions\\` getter/setter that updates only this field.\n+## Acceptance criteria\n \n-&#x20; \\- This remains session state like the existing image info visibility; do not add config persistence unless a separate feature asks for it.\n+- With restrictions present and the option enabled, both overlay and tooltip show a readable restrictions line.\n+- With no restrictions, neither surface shows an empty restrictions line.\n+- Toggling `Augmentation restrictions` updates its check mark and reloads both surfaces using the new visibility state.\n+- If it is the only enabled field and the item has restrictions, neither surface shows `No info selected`.\n+- If every field is disabled, both surfaces still show `No info selected`.\n+- Existing URI, Index details, and Value toggles retain their behavior.\n+- Opening `Info shown` from `search_result_item_menu.jsx` behaves as before, apart from the added option.\n+- Tests cover visibility defaults/setters in `activeViewService`, restriction output and visibility in `buildInfoLines`, the new `SearchResultInfoMenuItem`, and the updated overlay/tooltip empty-field checks.\n \n-\\- Create \\`src/main\\_window/images/search\\_result\\_info\\_menu\\_item.jsx\\`.\n+## Out of scope\n \n-&#x20; \\- It owns the \\`imageInfoVisibility\\` React state and the subscription to \\`activeViewService.events.imageInfoVisibility\\`.\n+- Editing restrictions from the overlay or tooltip.\n+- Changing restriction tag storage.\n+- Persisting visibility across app restarts.\n+- Changing the existing `Training augmentations` menu.\n \n-&#x20; \\- It renders the top-level \\`Info shown\\` \\`MenuItem\\`, its nested \\`Menu\\`, check marks, and all toggle handlers.\n+## Notes\n \n-&#x20; \\- Include menu items for \\`URI\\`, \\`Index details\\`, \\`Value\\`, and \\`Augmentation restrictions\\`.\n-\n-&#x20; \\- Use the same MUI menu primitives and submenu placement currently used by \\`search\\_result\\_item\\_menu.jsx\\`.\n-\n-&#x20; \\- Keep the component API small; the parent should not pass individual visibility fields or toggle handlers.\n-\n-\\- Update \\`search\\_result\\_item\\_menu.jsx\\`.\n-\n-&#x20; \\- Remove the inline \\`Info shown\\` state, effect, handlers, and submenu markup.\n-\n-&#x20; \\- Render the new \\`SearchResultInfoMenuItem\\` in the same location below \\`Show/Hide image info\\`.\n-\n-&#x20; \\- Keep parent-owned close behavior for the whole context menu unchanged.\n-\n-\\- Update \\`buildInfoLines\\`.\n-\n-&#x20; \\- Include augmentation restriction lines when \\`visibility.augmentationRestrictions !\\=\\= false\\` and the item has one or more \\`avoidAugmentations\\` tags.\n-\n-&#x20; \\- Reuse \\`AUGMENTATION\\_RESTRICTION\\_GROUPS\\` to map tags to user-facing labels. Unknown tags may fall back to the raw tag.\n-\n-&#x20; \\- Use a compact output format, for example \\`Augmentation restrictions: No shift left, No zoom out\\`.\n-\n-&#x20; \\- Do not add a line when the item has no restrictions.\n-\n-\\- Update \\`SearchResultInfoOverlay\\` and \\`SearchResultTooltip\\`.\n-\n-&#x20; \\- Their \\`hasVisibleFields\\` checks must include \\`augmentationRestrictions\\`.\n-\n-&#x20; \\- Visibility changes must continue to clear cached lines and reload the displayed info.\n-\n-\\## Acceptance Criteria\n-\n-\\- Given an Observation has \\`avoidAugmentations\\`, when image info is shown and \\`Augmentation restrictions\\` is enabled, then the overlay and tooltip include a readable augmentation restrictions line.\n-\n-\\- Given an Observation has no \\`avoidAugmentations\\`, when \\`Augmentation restrictions\\` is enabled, then no empty restrictions line is shown.\n-\n-\\- Given the user opens \\`Info shown\\`, when they toggle \\`Augmentation restrictions\\`, then the check mark updates and both overlay and tooltip reload according to the new visibility state.\n-\n-\\- Given only \\`Augmentation restrictions\\` is enabled, when an item has restriction tags, then the overlay/tooltip do not show \\`No info selected\\`.\n-\n-\\- Given all info fields are disabled, when the overlay or tooltip is rendered, then it still shows \\`No info selected\\`.\n-\n-\\- Given existing code toggles URI, Index details, or Value, when this feature is added, then those toggles keep their current behavior.\n-\n-\\- Given \\`search\\_result\\_item\\_menu.jsx\\` is rendered, when the \\`Info shown\\` menu is opened, then the submenu behavior is unchanged from the user's perspective except for the new augmentation restrictions option.\n-\n-\\- Tests cover \\`activeViewService\\` visibility defaults/setters, \\`buildInfoLines\\` restriction output and visibility behavior, the new \\`SearchResultInfoMenuItem\\`, and updated empty-field checks in overlay/tooltip.\n-\n-\\## Out of Scope\n-\n-\\- Editing augmentation restrictions from the info overlay or tooltip.\n-\n-\\- Changing how restriction tags are stored.\n-\n-\\- Persisting image info visibility settings across app restarts.\n-\n-\\- Changing the existing \\`Training augmentations\\` menu behavior.\n-\n-\\## Further Notes\n-\n-\\- Prefer importing the existing restriction label definitions instead of duplicating tag labels.\n-\n-\\- The new component should own the submenu state completely; this is an extraction of behavior, not just JSX.\n\\ No newline at end of file\n+- Import existing restriction labels; do not duplicate them.\n+- The new component must own all submenu state—this is a behavior extraction, not only a JSX extraction.\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-provider-7",
+          "timestamp": "2026-07-22T08:19:51.486Z",
+          "type": "tool.command_execution"
+        },
+        {
+          "content": "2026-07-22T08:19:51.509478Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-8",
+          "timestamp": "2026-07-22T08:19:51.508Z",
+          "type": "error"
+        },
+        {
+          "content": "\r\n\r\nBeforeWords      : 812\r\nAfterWords       : 564\r\nReductionPercent : 30.5\r\n\r\n\r\n\r\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-provider-9",
+          "timestamp": "2026-07-22T08:20:00.722Z",
+          "type": "tool.command_execution"
+        },
+        {
+          "content": "2026-07-22T08:20:00.784596Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-error-10",
+          "timestamp": "2026-07-22T08:20:00.783Z",
+          "type": "error"
+        },
+        {
+          "content": "0",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-closed",
+          "timestamp": "2026-07-22T08:20:06.398Z",
+          "type": "closed"
+        }
+      ],
+      "hasExplicitTitle": true,
+      "id": "agent-d6b85e43-2083-4376-8f99-5b8badffa7f7",
+      "messages": [
+        {
+          "content": "\\`design/active/F_4_someting_cool_again.md\\` is too verbose. make it more digestible, shorten it without loosing any detail.",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-user",
+          "role": "user",
+          "timestamp": "2026-07-22T08:18:39.790Z"
+        },
+        {
+          "agent": "codex",
+          "content": "I’ll tighten the document while preserving every requirement and nuance. I’ll first inspect the file and any repository-specific instructions, then edit and compare the result for coverage.The main readability problem is repetition plus escaped Markdown (`\\##`, `\\-`, `&#x20;`) that obscures the structure. I’m consolidating overlapping sections, keeping every behavioral requirement, edge case, file responsibility, and test expectation.Shortened and restructured [F_4_someting_cool_again.md](C:\\Users\\janbo\\Documents\\dev\\md2_test\\design\\active\\F_4_someting_cool_again.md).\n\n- Reduced from 812 to 564 words (30.5%).\n- Preserved requirements, edge cases, tests, and scope.\n- Fixed escaped Markdown for cleaner rendering.\n- `git diff --check` passes.",
+          "id": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-assistant",
+          "role": "assistant",
+          "timestamp": "2026-07-22T08:20:06.398Z"
+        }
+      ],
+      "providerSessions": [
+        {
+          "agent": "codex",
+          "conversationId": "019f88e7-d867-75c0-b48b-fd78b7c428d1",
+          "createdAt": "2026-07-22T08:20:06.398Z",
+          "lastUsedAt": "2026-07-22T08:20:06.398Z",
+          "synchronizedThroughMessageId": "agent-turn-1d2bf1e7-9ca5-4dcf-b678-ec58f2859d08-assistant"
+        }
+      ],
+      "startedAt": "2026-07-22T08:18:39.790Z",
+      "status": "completed",
+      "title": "shorten",
+      "usage": {
+        "cachedInputTokens": 81408,
+        "inputTokens": 18163,
+        "outputTokens": 2020,
+        "reasoningTokens": 221,
+        "totalTokens": 101812
+      }
+    }
+  ],
+  "origin": {
+    "cardInternalId": "ec632bef-01bd-4e16-ae1a-402cbc2d26c4",
+    "kind": "card"
+  },
+  "records": [],
+  "version": 1
+}
