@@ -12,7 +12,7 @@ after: a5e5e021-323f-4b63-b2c5-e7f9bc54a188
 ---
 **## Goal**
 
-Make one canonical \`Op   enDocument\` own each open file's in-memory draft and dirty state. List and board views use the same object, so content, save state, renewal, and events cannot diverge. Dirty means the complete JSON or Markdown file still needs successful persistence; prompt, phrase, body, and editor-instance dirty flags do not exist.
+Make one canonical \`OpenDocument\` own each open file's in-memory draft and dirty state. List and board views use the same object, so content, save state, renewal, and events cannot diverge. Dirty means the complete JSON or Markdown file still needs successful persistence; prompt, phrase, body, and editor-instance dirty flags do not exist.
 
 **## Current problems**
 
