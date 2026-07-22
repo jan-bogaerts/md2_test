@@ -315,6 +315,79 @@
         "reasoningTokens": 0,
         "totalTokens": 13173
       }
+    },
+    {
+      "actionId": "md2.custom-prompt",
+      "cardInternalId": null,
+      "completedAt": "2026-07-22T11:21:33.779Z",
+      "events": [
+        {
+          "content": "codex --model gpt-5.6-sol -c model_reasoning_effort=medium --search exec --json",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-started",
+          "timestamp": "2026-07-22T11:21:18.712Z",
+          "type": "started"
+        },
+        {
+          "content": "2026-07-22T11:21:20.028357Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-error-1",
+          "timestamp": "2026-07-22T11:21:20.028Z",
+          "type": "error"
+        },
+        {
+          "content": "design\r\n",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-provider-2",
+          "timestamp": "2026-07-22T11:21:31.729Z",
+          "type": "tool.command_execution"
+        },
+        {
+          "content": "2026-07-22T11:21:31.792567Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-error-3",
+          "timestamp": "2026-07-22T11:21:31.792Z",
+          "type": "error"
+        },
+        {
+          "content": "0",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-closed",
+          "timestamp": "2026-07-22T11:21:33.779Z",
+          "type": "closed"
+        }
+      ],
+      "hasExplicitTitle": true,
+      "id": "agent-93694a8e-9776-4e6b-984f-39b48ad21c5d",
+      "messages": [
+        {
+          "content": "list all sub folders in the current folder",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-user",
+          "role": "user",
+          "timestamp": "2026-07-22T11:21:18.712Z"
+        },
+        {
+          "agent": "codex",
+          "content": "I’ll inspect the current directory and list only its immediate subfolders.- `design`",
+          "id": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-assistant",
+          "role": "assistant",
+          "timestamp": "2026-07-22T11:21:33.779Z"
+        }
+      ],
+      "providerSessions": [
+        {
+          "agent": "codex",
+          "conversationId": "019f898f-090b-7532-bc59-7d93bb991e84",
+          "createdAt": "2026-07-22T11:21:33.779Z",
+          "lastUsedAt": "2026-07-22T11:21:33.779Z",
+          "synchronizedThroughMessageId": "agent-turn-ae973756-8c23-4b50-a578-9be0fae9a307-assistant"
+        }
+      ],
+      "startedAt": "2026-07-22T11:21:18.712Z",
+      "status": "completed",
+      "title": "Custom prompt",
+      "usage": {
+        "cachedInputTokens": 22016,
+        "inputTokens": 4081,
+        "outputTokens": 89,
+        "reasoningTokens": 0,
+        "totalTokens": 26186
+      }
     }
   ],
   "origin": {
@@ -425,12 +498,12 @@
       ],
       "executionId": "action-c114cb6d-7084-40e6-a8e7-ea0e173bf889",
       "history": {
-        "agent": "codex",
         "completedAt": "2026-07-21T13:27:22.346Z",
-        "model": "gpt-5.6-sol",
         "output": "Hi! What can I help you with?2026-07-21T13:27:16.314868Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n",
         "prompt": "hi",
         "status": "completed",
+        "agent": "codex",
+        "model": "gpt-5.6-sol",
         "thinkingLevel": "medium"
       },
       "origin": {
