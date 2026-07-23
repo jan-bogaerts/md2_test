@@ -9,10 +9,6 @@ affects:
 policy:
 after: f1150d6f-4ad8-454f-afa2-9e386d645b46
 agents:
-  - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-d6b85e43-2083-4376-8f99-5b8badffa7f7
-  - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-118559c2-9ec9-49b7-ac0b-4b79a057438f
-  - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-671654c4-ca6d-478f-a055-b50be7391b00
-  - design/activity/card__ec632bef-01bd-4e16-ae1a-402cbc2d26c4.json#conversation=agent-b9f38041-7b84-4769-9b60-1682aceff466
 worktree: 1
 ---
 
