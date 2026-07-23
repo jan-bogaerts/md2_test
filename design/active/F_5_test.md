@@ -10,243 +10,111 @@ agents:
 policy:
 after: 2f8cfca2-95da-464f-b14c-b5980a74d2d9
 ---
-**## Goal**
 
+## Goal
 
+Use one canonical `OpenDocument` for each open file's draft and dirty state. List and board views share it, so content, save state, renewal, and events cannot diverge.
 
+“Dirty” means the complete JSON or Markdown file still needs successful persistence. Prompt-, phrase-, body-, and editor-instance dirty flags do not exist.
 
-Make one canonical \`OpenDocument\` own each open file's in-memory draft and dirty state. List and board views use the same object, so content, save state, renewal, and events cannot diverge. Dirty means the complete JSON or Markdown file still needs successful persistence; prompt, phrase, body, and editor-instance dirty flags do not exist.
+## Problems
 
+- `MarkdownEditorStateStore`, `ActionService` revisions, and `CommitBatcher` separately track the same file at different save stages.
+- Markdown data sources discard `OpenDocument` identity for string IDs, then resolve domain objects again.
+- Board and list editors can hold different buffers for one card.
+- `ActionService.savedRevision` advances when `DataService.persistActionFile()` schedules a batch, before `storage.commit()` succeeds.
+- `CardBodySaveStatus` masks the split by combining editor and batch dirty state.
 
+## Design
 
+### Canonical documents and view ownership
 
-**## Current problems**
+`OpenFilesService` owns a stable card/action identity registry and list/board membership sets, all referencing canonical `OpenDocument`s.
 
+- Opening an already registered card in another view reuses its document without opening or activating a list tab.
+- Closing a view removes only its membership.
+- A document stays registered while either view owns it or it holds unsaved/recoverable state. Close and project-switch flows must explicitly flush, discard, or retain that state.
+- Reopening a fully saved, released document creates a new wrapper and history.
 
+Each document is a stable `EventTarget` exposing its full current domain object, draft, file-level dirty state, and private edit/save revisions. Renewal updates the object without replacing the document. Draft, dirty, saved, and renewal transitions emit events; consumers read properties directly—do not add a boolean `getSnapshot()`.
 
+### Shared drafts and editor bindings
 
-\- \`MarkdownEditorStateStore\` tracks one editor buffer while \`ActionService\` revisions and \`CommitBatcher\` separately track the same file through later save stages.
+Every edit updates the active document draft and dirties the file. Data sources retain full documents rather than reconstructing ownership from paths or compound IDs. Board and list editors share the draft and subscription. Origin metadata preserves the source editor's state, cursor, and history while preventing other editors from echoing updates.
 
-\- Markdown data sources discard \`OpenDocument\` identity, retain string IDs, and resolve domain objects again.
+`MarkdownEditor` reports edits through its active document/data source but never declares a persisted document clean. Local transient editors without an `OpenDocument` may retain `onDirtyChange`; they are outside project-file persistence.
 
-\- Board and list card editors can hold different local buffers for the same card.
+An action has one `ActionOpenDocument` and one dirty file. Prompt and phrases are editor sections:
 
-\- \`ActionService.savedRevision\` advances when \`DataService.persistActionFile()\` schedules a batch, before \`storage.commit()\` succeeds.
+```ts
+type ActionMarkdownSection =
+  | { kind: 'prompt' }
+  | { kind: 'phrase'; identity: string }
+```
 
-\- \`CardBodySaveStatus\` hides the split by combining editor dirty state with \`CommitBatcher\` state.
+The active target pairs the canonical action document with a section. Section identity routes outgoing text, external replacement, undo history, and phrase deletion, but owns no dirty state and is not a public namespaced `markdownDocumentId`. Card body has one implicit `body` section.
 
+Echo suppression and binding-owned history key by document plus section. Document close discards all its histories; phrase deletion discards only that section's. Switching must retain the exact outgoing target during flush.
 
+### Persistence
 
+`OpenDocument.dirty` is authoritative for whether an open file needs saving:
 
-**## Design**
+1. Mutation increments the private edit revision and marks the document dirty.
+2. Scheduling persistence captures the document, revision, and complete serialized file.
+3. `CommitBatcher` tracks operational pending/in-flight entries per file.
+4. Only a successful `storage.commit()` acknowledges that revision on the document.
+5. Failure leaves it dirty; completion of an older revision cannot clear newer edits.
 
+Unschedulable invalid action drafts remain dirty. Once repaired, serialize and queue the complete current action. `ActionService` may keep draft, validation, conflict, and queue revisions, but its saved revision means successful batch persistence—not batch handoff.
 
+Path changes carry the same document and revision through the batch. A successful rename renews the path without replacing document identity.
 
+`ProjectPersistenceService` remains the aggregate coordinator. Pending-save state includes:
 
-**### Canonical open documents**
+- dirty/recoverable documents;
+- pending or in-flight batches; and
+- active storage operations.
 
+`hasPendingPush` stays separate Git state. `CommitBatcher` entries still represent files without open documents, including board ordering and bulk operations.
 
+### Lifecycle and conflicts
 
+- Switching section, tab, view, project, or branch—and closing the app—flushes editor drafts before batches.
+- Failed flushes or commits leave document and global persistence state dirty, retained, and retryable.
+- External changes renew a clean draft; dirty documents use existing conflict/recovery behavior and never silently lose local content.
+- Closing the last view of an invalid or conflicted action must preserve its recoverable draft.
 
-\`OpenFilesService\` owns a registry keyed by stable card/action identity plus two membership sets:
+## Implementation
 
+- Add the canonical registry and list/board membership APIs to `OpenFilesService`.
+- Replace ID-only Markdown binding snapshots/events with document and optional section targets.
+- Update editor/history target switching to flush the exact outgoing target.
+- Make card/action data sources use document drafts and current document paths.
+- Add document/revision metadata and successful-save callbacks to `CommitBatcher` writes/renames.
+- Align action saved-revision acknowledgement and project persistence aggregation with batch completion.
+- Migrate board/list components, active-card hooks, toolbar/diff consumers, cleanup handlers, and save status to full documents.
+- Make `CardBodySaveStatus` read the canonical card document's file-level dirty state rather than combining sources.
+- Remove `MarkdownEditorStateStore` props, instances, subscriptions, and tests.
+- Rename generic per-file batch queries such as `hasPendingActionFile` where still required for conflict handling.
+- Delete compound action Markdown ownership helpers once no internal history migration needs them.
 
+## Acceptance criteria
 
+- Board and list share one `CardOpenDocument`, draft, dirty state, and event stream.
+- Editing any card body, action field, prompt, or phrase dirties exactly one file document.
+- Only successful physical persistence clears its captured revision; failures and newer edits stay dirty.
+- Prompt/phrase switching writes the outgoing section while keeping one dirty action document.
+- Invalid/conflicted actions remain recoverable and dirty without a queued batch.
+- Save indicators, flush guards, project/branch switches, and app close include all dirty documents and pending batches.
+- Remove all `MarkdownEditorStateStore`s, persisted editor dirty flags, public compound `markdownDocumentId`s, and prematurely advanced `savedRevision`s.
+- Tests cover shared board/list editing, section routing, renewal/rename, close/reopen, invalid actions, external conflicts, failed saves, and edits during an in-flight save.
+- App lint and tests pass.
 
-\- list-view documents;
+## See also
 
-\- board-view documents.
-
-
-
-
-Both sets reference the same canonical \`OpenDocument\`. Opening an already registered card in another view reuses it and does not open or activate a list tab. Closing one view removes only that membership. A document remains registered while either view owns it or while it has unsaved/recoverable state; close and project-switch flows must flush, discard, or retain that state explicitly.
-
-
-
-
-Each document is a stable \`EventTarget\` exposing its current full domain object, current draft, file-level dirty state, and private edit/save revisions. Domain renewal updates the stable object. Draft, dirty, saved, and renewal transitions emit document events; consumers read document properties directly. Do not add a \`getSnapshot()\` method for a boolean.
-
-
-
-
-**### Shared drafts**
-
-
-
-
-Every edit updates the active \`OpenDocument\` draft and marks the whole file dirty. Data sources receive and retain full documents, never reconstruct ownership from paths or compound IDs. Both card editors read the same draft and subscribe to the same document. An edit from one binding updates the other binding; origin metadata prevents the originating editor from replacing its own state or losing cursor/history.
-
-
-
-
-\`MarkdownEditor\` reports edits through the active document/data source but never declares a persisted document clean. Local transient editors without an \`OpenDocument\` may keep \`onDirtyChange\`; they are outside project-file save state.
-
-
-
-
-**### Action sections**
-
-
-
-
-An action is one \`ActionOpenDocument\` and one dirty file. Prompt and phrases are editor sections only:
-
-
-
-
-\`\`\`ts
-
-type ActionMarkdownSection \=
-
-    | { kind: 'prompt' }
-
-    | { kind: 'phrase'; identity: string }
-
-\`\`\`
-
-
-
-
-The active target pairs the canonical action document with its section. Section identity routes outgoing text, external replacement, undo history, and phrase deletion. It never owns dirty state and is not encoded as a public namespaced \`markdownDocumentId\`. Card body uses one implicit \`body\` section.
-
-
-
-
-History and echo suppression key by canonical document plus section. History remains binding-owned. Closing a document discards its histories; deleting a phrase discards only that section.
-
-
-
-
-**### Save ownership**
-
-
-
-
-\`OpenDocument.dirty\` is authoritative for whether an open file needs saving:
-
-
-
-
-1\. A document mutation increments its private edit revision and marks it dirty.
-
-2\. Scheduling persistence captures document and revision with the complete serialized file.
-
-3\. \`CommitBatcher\` keeps operational pending/in-flight entries per file.
-
-4\. Only successful \`storage.commit()\` acknowledges the captured revision on the document.
-
-5\. A failed commit leaves it dirty. Completion of an older revision cannot clear newer edits.
-
-
-
-
-Invalid action drafts remain dirty even when they cannot yet be scheduled. When repaired, the complete current action is serialized and queued. \`ActionService\` may retain draft, validation, conflict, and queue revisions, but its saved revision must represent successful batch persistence, not handoff to \`CommitBatcher\`.
-
-
-
-
-Path changes carry the same document and revision through the batch. Successful rename renews the document path without replacing document identity.
-
-
-
-
-\`ProjectPersistenceService\` remains the aggregate coordinator. It derives pending-save state from dirty/recoverable documents, pending or in-flight commit batches, and active storage operations. \`hasPendingPush\` remains separate Git state. Files changed without an open document, such as board ordering or bulk operations, continue to be represented by \`CommitBatcher\` entries.
-
-
-
-
-**### Removal**
-
-
-
-
-Remove \`MarkdownEditorStateStore\`, its props, instances, subscriptions, and tests. \`CardBodySaveStatus\` subscribes to the canonical card document and reads its file-level dirty state; it no longer combines two dirty sources. Rename generic per-file batch queries such as \`hasPendingActionFile\` where they remain needed for conflict handling.
-
-
-
-
-**## Failure and lifecycle rules**
-
-
-
-
-\- Switching section, tab, view, project, branch, or closing the app flushes editor drafts into persistence before flushing batches.
-
-\- A failed flush or storage commit keeps the document and global persistence state dirty and retryable.
-
-\- External content change against a clean document renews its draft; against a dirty document it follows existing conflict/recovery behavior and never silently replaces local content.
-
-\- Simultaneous board/list editing uses one draft. Non-origin editors synchronize without writing an echo back.
-
-\- Closing the last view of an invalid or conflicted action must not lose its recoverable draft.
-
-\- Reopening a fully saved, released document creates a fresh wrapper and fresh history.
-
-
-
-
-**## Implementation scope**
-
-
-
-
-\- Replace ID-only Markdown binding snapshots/events with full document plus optional section targets.
-
-\- Update Markdown editor and history monitor switching to retain the exact outgoing target during flush.
-
-\- Make card/action data sources operate on document drafts and current document paths.
-
-\- Add canonical registry and list/board membership APIs to \`OpenFilesService\`.
-
-\- Add document/revision metadata and successful-save callbacks to \`CommitBatcher\` entries, including normal writes and renames.
-
-\- Align action draft save acknowledgement and project persistence aggregation with batch completion.
-
-\- Update board/list components, active-card hooks, toolbar/diff consumers, cleanup handlers, and save status to use full documents.
-
-\- Delete compound action Markdown document ownership helpers when no remaining internal history migration requires them.
-
-
-
-
-**## Acceptance criteria**
-
-
-
-
-\- Board and list views of one card receive the same \`CardOpenDocument\`, draft content, dirty state, and events.
-
-\- Editing any card body, action field, prompt, or phrase marks exactly one file-level document dirty.
-
-\- Successful physical batch persistence clears only the saved revision; failures and newer edits remain dirty.
-
-\- Action prompt/phrase switching always writes the outgoing section, while the action stays one dirty document.
-
-\- Invalid/conflicted actions remain recoverable and dirty without a queued batch.
-
-\- Project save indicators, flush guards, project/branch switching, and app close observe all dirty documents and pending batches.
-
-\- No \`MarkdownEditorStateStore\`, editor-specific persisted dirty flag, public compound \`markdownDocumentId\`, or false pre-persistence \`savedRevision\` remains.
-
-\- Tests cover shared board/list editing, section routing, renewal/rename, close/reopen, invalid actions, external conflicts, failed saves, and edits arriving during an in-flight save.
-
-\- App lint and tests pass.
-
-
-
-
-**## See also**
-
-
-
-
-\- \[\[J-017]]
-
-\- \[\[J-018]]
-
-\- \[\[B-052]]
-
-\- \[\[B-068]]
-
-\- \[\[B-071]]
+- [[J-017]]
+- [[J-018]]
+- [[B-052]]
+- [[B-068]]
+- [[B-071]]
