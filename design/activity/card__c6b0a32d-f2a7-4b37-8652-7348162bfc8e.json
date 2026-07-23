@@ -574,6 +574,43 @@
       "rootActionLabel": "Custom prompt",
       "startedAt": "2026-07-23T13:23:19.589Z",
       "status": "completed"
+    },
+    {
+      "commits": [
+        {
+          "branch": "main",
+          "commit": "f4f20fd41c2cd4a1ac45c73bbce613d333ae854b",
+          "committedAt": "2026-07-23T15:30:30+02:00",
+          "deletions": 53,
+          "filePaths": [
+            "design/active/F_5_test.md"
+          ],
+          "filesChanged": 1,
+          "insertions": 52
+        }
+      ],
+      "completedAt": "2026-07-23T13:30:30.579Z",
+      "conversationIds": [
+        "agent-5e474d1b-80d9-45b6-979d-81be3e03e5da"
+      ],
+      "executionId": "action-b6522704-0ec0-4d96-b909-9307e06205a4",
+      "history": {
+        "agent": "codex",
+        "completedAt": "2026-07-23T13:30:30.398Z",
+        "model": "gpt-5.6-sol",
+        "output": "I’ll tighten the document’s structure and wording while preserving every requirement and nuance. I’ll first inspect the file and any workspace guidance, then edit and compare the result.\n\nThe core design is sound; most of the excess comes from repeated ownership/save semantics across prose, implementation, and acceptance criteria. I’m consolidating those repetitions and using tighter lifecycle rules without dropping the edge cases.\n\nThe first pass improved clarity but only reduced the word count marginally, so I’m tightening it further. I’m preserving the explicit acceptance checklist while compressing the descriptive sections where the same concepts can be stated once.\n\nReworked [F_5_test.md](C:\\Users\\janbo\\Documents\\dev\\md2_test\\design\\active\\F_5_test.md) for clearer, tighter reading.\n\n- Removed 126 words (13%)\n- Preserved requirements, edge cases, acceptance criteria, and metadata\n- `git diff --check` passes\n- No tests run; documentation-only change2026-07-23T13:25:37.229558Z ERROR codex_models_manager::cache: failed to load models cache: missing field `supports_reasoning_summaries` at line 88 column 5\n2026-07-23T13:26:35.074043Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in C:\\Users\\janbo\\Documents\\dev\\md2_test\\design\\active\\F_5_test.md:\n## Goal\n\nUse one canonical `OpenDocument` for each open file's draft and dirty state. List and board views share it, preventing content, save state, renewal, and event divergence.\n\nâ€œDirtyâ€ means the complete JSON or Markdown file still needs successful persistence. Prompt, phrase, body, and editor-instance dirty flags do not exist.\n\n## Problems\n\n- `MarkdownEditorStateStore`, `ActionService`, and `CommitBatcher` separately track the same file across save stages.\n- Markdown data sources discard `OpenDocument` identity for string IDs, then resolve domain objects again.\n- Board and list editors can hold different buffers for one card.\n- `ActionService.savedRevision` advances when `DataService.persistActionFile()` schedules a batch, before `storage.commit()` succeeds.\n- `CardBodySaveStatus` masks this split by combining editor and batch dirty state.\n\n## Design\n\n### Canonical documents and view ownership\n\n`OpenFilesService` owns a stable card/action identity registry and list/board membership sets referencing canonical `OpenDocument`s.\n\n- Opening a registered card in another view reuses its document without opening or activating a list tab.\n- Closing a view removes only its membership.\n- A document stays registered while a view owns it or it holds unsaved/recoverable state. Close and project-switch flows explicitly flush, discard, or retain that state.\n- Reopening a fully saved, released document creates a new wrapper and history.\n\nEach document is a stable `EventTarget` exposing its domain object, draft, file-level dirty state, and private edit/save revisions. Renewal updates the object without replacing the document. Draft, dirty, saved, and renewal transitions emit events; consumers read properties directlyâ€”do not add a boolean `getSnapshot()`.\n\n### Shared drafts and editor bindings\n\nEvery edit updates the active document draft and dirties the file. Data sources retain full documents instead of reconstructing ownership from paths or compound IDs. Board and list editors share its draft and subscription. Origin metadata preserves the source editor's state, cursor, and history while preventing update echoes.\n\n`MarkdownEditor` reports edits through its active document/data source but never declares it clean. Transient editors without an `OpenDocument` may retain `onDirtyChange`; they are outside project-file persistence.\n\nAn action has one `ActionOpenDocument` and one dirty file. Prompt and phrases are editor sections:\n\n```ts\ntype ActionMarkdownSection =\n2026-07-23T13:28:23.658637Z ERROR codex_models_manager::manager: failed to renew cache TTL: missing field `supports_reasoning_summaries` at line 88 column 5\n",
+        "prompt": "\\`design/active/F_5_test.md\\` is too verbose. make it more digestible, shorten it without loosing any detail.\n\nDo not stage or commit changes. md2 will commit files captured from provider edit tools.",
+        "status": "completed",
+        "thinkingLevel": "medium"
+      },
+      "origin": {
+        "cardInternalId": "c6b0a32d-f2a7-4b37-8652-7348162bfc8e",
+        "kind": "card"
+      },
+      "rootActionId": "558aca4d-9760-4cf0-a2a0-4319d1e20538",
+      "rootActionLabel": "shorten",
+      "startedAt": "2026-07-23T13:25:36.865Z",
+      "status": "completed"
     }
   ],
   "version": 1
